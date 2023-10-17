@@ -1,0 +1,9 @@
+sum_so_far = 0
+while True:
+    n= input()
+    if n== '$':
+        print(sum_so_far)
+        break
+    n = int(n)
+    sum_so_far += n
+    

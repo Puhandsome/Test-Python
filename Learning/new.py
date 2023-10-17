@@ -1,0 +1,1 @@
+Decimal("1.2")-Decimal("0.2")

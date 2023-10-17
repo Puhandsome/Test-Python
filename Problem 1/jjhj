@@ -1,0 +1,10 @@
+#Finding the sums of all positive integers entered by the user
+sum_so_far = 0
+while True:
+    n= input()
+    if n== '$':
+        print(sum_so_far)
+        break
+    n=int(n)
+    if n>0:
+        sum_so_far += (n)

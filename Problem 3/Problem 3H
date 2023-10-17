@@ -1,0 +1,9 @@
+n = int(input())
+ball = 0
+print(ball + 1)  # print where the ball is
+ball = (ball + 3) % n  # pass the ball
+# the ball is not at 0 now
+
+while ball != 0:  # while the ball is not at 0
+    print(ball + 1)  # print where the ball is
+    ball = (ball + 3) % n  # pass the ball

@@ -1,0 +1,39 @@
+XA1 = int(input())
+YA1 = int(input())
+XA2 = int(input())
+YA2 = int(input())
+XB1 = int(input())
+YB1 = int(input())
+XB2 = int(input())
+YB2 = int(input())
+
+#Left that most right
+if XA1>XB1:
+    left = XA1
+else:
+    left = XB1
+
+#Right that most left
+if XA2<XB2:
+    right = XA2
+else:
+    right = XB2
+
+#Top that most low
+if YA1<YB1:
+    top = YA1
+else:
+    top = YB1
+
+#Bottom that most high
+if YA2>YB2:
+    bottom = YA2
+else:
+    bottom = YB2
+
+if right>left and top>bottom:
+    width = right - left
+    hight = top - bottom
+    print(width*hight)
+else:
+    print(0)

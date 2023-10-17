@@ -1,0 +1,7 @@
+n = int(input())
+if n<0 or n>20:
+    print("Invalid input")
+else:
+    while n>=0:
+        print(n)   
+        n-=1

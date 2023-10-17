@@ -1,5 +1,0 @@
-s="abc"
-while s!="":
-    s = input()
-    if s!="":
-        print("Hello",s)

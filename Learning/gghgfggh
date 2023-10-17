@@ -1,4 +1,0 @@
-import math
-x = 5/2
-print("Floor of",x,"is",math.floor(x))
-print("Ceiling of",x,"is",math.ceil(x))

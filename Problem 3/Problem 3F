@@ -1,9 +1,0 @@
-a = int(input())
-if a<1 and a>1000:
-    print("Invalid input")
-else:
-    c = 1
-    while c<=a :
-        if a%c == 0:
-            print(c)
-        c+=1

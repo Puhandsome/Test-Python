@@ -1,6 +1,0 @@
-w = int(input())
-h = int(input())
-for i in range(h):
-    for j in range(w):
-       print((j+i)%3,end="")
-    print()

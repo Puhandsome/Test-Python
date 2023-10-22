@@ -13,6 +13,28 @@ symbol_count = {
     "C" : 6,
     "D" : 8
 }
+symbol_value = {
+    "A" : 5,
+    "B" : 4,
+    "C" : 3,
+    "D" : 2
+}
+#To check how much the user's have won the bet
+def check_winnings(columns,lines,bet,values):
+    winnings = 0
+    winning_lines = []
+    for line in range(lines): #Check the symbol in a line
+        symbol = columns[0][line] #Check the first column and check lines
+        for column in columns: #loop to check all symbols by columns
+            symbol_to_check = column[line] #check the column at whatever rows you are looking at
+            if symbol != symbol_to_check:
+                break
+        else: # if the for loop doesn't break out then come to else(if they win)
+            winnings += values[symbol] * bet
+            winning_lines.append(line + 1)
+
+    return winnings, winning_lines
+
 #To generate a random slot machine
 def get_slot_machine_spin(rows,cols,symbols):
     all_symbols = []
@@ -83,9 +105,7 @@ def get_bet():
             print("Please enter a number.")
     return amount
 
-#Main running functions
-def main():
-    balance = deposit()
+def spin(balance):
     lines = get_number_of_lines()
     while True: #To check if the total bet is greater than the balance or not
         bet = get_bet()
@@ -96,6 +116,23 @@ def main():
             break
     print(f"You are betting ${bet} on {lines} lines. Total bet is equal to: ${total_bet}") #if the balnce is greater than the bet then print this line
     slots = get_slot_machine_spin(ROWS,COLS,symbol_count) #Generate a slot machine
-    print_slot_machine(slots)
+    print_slot_machine(slots) #print out
+    winnings,winning_line = check_winnings(slots,lines,bet,symbol_value) #check winnigs
+    print(f"You won ${winnings}.")
+    print(f"You won on lines:", *winning_line) #print with space if don't win then it will print out nothing
+    return winnings - total_bet 
+
+#Main running functions
+def main():
+    balance = deposit()
+    while True:
+        print(f"Current balance is ${balance}")
+        answer = input("Press enter to play (q to quit).")
+        if answer == 'q':
+            break
+        balance += spin(balance)
+    
+    print(f"You left with ${balance}.")
+
 
 main()

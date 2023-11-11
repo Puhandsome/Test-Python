@@ -8,32 +8,61 @@ ROWS = 3
 COLS = 3
 #Oods for symbols in a slot machine
 symbol_count = {
-    "A" : 2,
-    "B" : 4,
-    "C" : 6,
-    "D" : 8
+    "A" : 4,
+    "B" : 6,
+    "C" : 8,
+    "D" : 10
 }
+#If this symbol occurs, multiply by this number
 symbol_value = {
     "A" : 5,
     "B" : 4,
     "C" : 3,
     "D" : 2
 }
-#To check how much the user's have won the bet
-def check_winnings(columns,lines,bet,values):
-    winnings = 0
-    winning_lines = []
-    for line in range(lines): #Check the symbol in a line
-        symbol = columns[0][line] #Check the first column and check lines
-        for column in columns: #loop to check all symbols by columns
-            symbol_to_check = column[line] #check the column at whatever rows you are looking at
-            if symbol != symbol_to_check:
-                break
-        else: # if the for loop doesn't break out then come to else(if they win)
-            winnings += values[symbol] * bet
-            winning_lines.append(line + 1)
+   
 
-    return winnings, winning_lines
+#User's deposit
+def deposit():
+    while True:
+        amount = input("What would you like to deposit? $")
+        if amount.isdigit():
+            amount = int(amount)
+            if amount > 0:
+                break
+            else:
+                print("Amount must be greater than 0.")
+        else:
+            print("Please enter a number.")
+    return amount
+
+#How many lines do the user want to bet on?
+def get_number_of_lines():
+    while True:
+        lines = input(f"Enter the number of lines to bet on (1-{MAX_LINES})? ")
+        if lines.isdigit():
+            lines = int(lines)
+            if 1 <= lines <= MAX_LINES:
+                break
+            else:
+                print("Enter a valid number of lines")
+        else:
+            print("Please enter a number.")
+    return lines
+
+#Get the amount of money that user want to bet on
+def get_bet():
+    while True:
+        amount = input("What would you like to bet on each line? $")
+        if amount.isdigit():
+            amount = int(amount)
+            if MIN_BET <= amount <= MAX_BET:
+                break
+            else:
+                print(f"Amount must be between ${MIN_BET} - ${MAX_BET}.") #f is to call function in a string
+        else:
+            print("Please enter a number.")
+    return amount
 
 #To generate a random slot machine
 def get_slot_machine_spin(rows,cols,symbols):
@@ -62,67 +91,43 @@ def print_slot_machine(columns):
                 print(column[row],end = " | ")
             else:
                 print(column[row],end = " ") #Don't print the pipe operator at the end
-        print() #move to the next line and start a new row       
+        print() #move to the next line and start a new row
 
-#User's deposit
-def deposit():
-    while True:
-        amount = input("What would you like to deposit? $")
-        if amount.isdigit():
-            amount = int(amount)
-            if amount > 0:
+#To check how much the user's have won the bet
+def check_winnings(columns,lines,bet,values):
+    winnings = 0
+    winning_lines = []
+    for line in range(lines): #Check the symbol in a line
+        symbol = columns[0][line] #Check the first column and check lines
+        for column in columns: #loop to check all symbols by columns
+            symbol_to_check = column[line] #check the column at whatever rows you are looking at
+            if symbol != symbol_to_check:
                 break
-            else:
-                print("Amount must be greater than 0.")
-        else:
-            print("Please enter a number.")
-    return amount
+        else: # if the for loop doesn't break out then come to else(if they win)
+            winnings += values[symbol] * bet
+            winning_lines.append(line + 1)
 
-#How many lines do the user want to bet on?
-def get_number_of_lines():
-    while True:
-        lines = input("Enter the number of lines to bet on (1-" + str(MAX_LINES) + ")? ") #Added 2 strings together
-        if lines.isdigit():
-            lines = int(lines)
-            if 1 <= lines <= MAX_LINES:
-                break
-            else:
-                print("Enter a valid number of lines")
-        else:
-            print("Please enter a number.")
-    return lines
-#Get the amount of money that user want to bet on
-def get_bet():
-    while True:
-        amount = input("What would you like to bet on each line? $")
-        if amount.isdigit():
-            amount = int(amount)
-            if MIN_BET <= amount <= MAX_BET:
-                break
-            else:
-                print(f"Amount must be between ${MIN_BET} - ${MAX_BET}.") #f is to call function in a string
-        else:
-            print("Please enter a number.")
-    return amount
+    return winnings, winning_lines
 
+#Main running functions
 def spin(balance):
     lines = get_number_of_lines()
-    while True: #To check if the total bet is greater than the balance or not
+    while True:
         bet = get_bet()
         total_bet = bet * lines
         if total_bet > balance:
             print(f"You do not have enough to bet that amount, your current balance is: ${balance}")
         else:
             break
-    print(f"You are betting ${bet} on {lines} lines. Total bet is equal to: ${total_bet}") #if the balnce is greater than the bet then print this line
-    slots = get_slot_machine_spin(ROWS,COLS,symbol_count) #Generate a slot machine
-    print_slot_machine(slots) #print out
-    winnings,winning_line = check_winnings(slots,lines,bet,symbol_value) #check winnigs
+    print(f"You are betting ${bet} on {lines} lines. Total bet is equal to: ${total_bet}")
+    slots = get_slot_machine_spin(ROWS,COLS,symbol_count) 
+    print_slot_machine(slots) 
+    winnings,winning_line = check_winnings(slots,lines,bet,symbol_value)
     print(f"You won ${winnings}.")
     print(f"You won on lines:", *winning_line) #print with space if don't win then it will print out nothing
     return winnings - total_bet 
 
-#Main running functions
+#Looping the program
 def main():
     balance = deposit()
     while True:

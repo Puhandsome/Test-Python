@@ -6,7 +6,7 @@ MIN_BET = 1
 
 ROWS = 3
 COLS = 3
-#Oods for symbols in a slot machine
+#Odds for symbols in a slot machine
 symbol_count = {
     "A" : 4,
     "B" : 6,
@@ -65,47 +65,66 @@ def get_bet():
     return amount
 
 #To generate a random slot machine
-def get_slot_machine_spin(rows,cols,symbols):
+def get_slot_machine_spin(rows, cols, symbols):
     all_symbols = []
-    for symbol,symbol_count in symbols.items(): # A,2 in keys and items
-        for _ in range(symbol_count): #in range 2
-            all_symbols.append(symbol) # A,A
+
+    # Create a list with symbols repeated according to their counts
+    for symbol, symbol_count in symbols.items():
+        for _ in range(symbol_count):
+            all_symbols.append(symbol)
 
     columns = []
-    for _ in range(cols): #if cols = 3, do this loop 3 times
+
+    # Loop to create columns
+    for _ in range(cols):
         column = []
-        current_symbols = all_symbols[:] #Create a copy of the list
+        current_symbols = all_symbols[:]
+
+        # Loop to fill rows in the column
         for _ in range(rows):
-            value = random.choice(current_symbols) #Randomly pick a symbol from the copied list
-            current_symbols.remove(value) #To remove the characters that have been used
-            column.append(value) #To add a value to the column
-        
-        columns.append(column) #Add the column to the columns list
-    return columns #return all values in the loop to the columns
+            value = random.choice(current_symbols) 
+            current_symbols.remove(value)  
+            column.append(value)  
 
-#To print out the slot machine
+        columns.append(column)  
+    return columns
+
+
+# To print out the slot machine
 def print_slot_machine(columns):
-    for row in range(len(columns[0])): #loops through each rows in the first column(length of rows)
-        for i,column in enumerate(columns): #enumerate is used to get both index(i) and the content(column)
-            if i != len(columns) - 1: #print the pipe operator when the index is not 2
-                print(column[row],end = " | ")
+    # Outer Loop through Rows
+    for row in range(len(columns[0])):
+        # Inner Loop through Columns
+        for i, column in enumerate(columns): #to get both index(i) and the column
+            # Print Pipe Operator or Space
+            if i != len(columns) - 1:
+                print(column[row], end=" | ")  # Print symbol and pipe operator
             else:
-                print(column[row],end = " ") #Don't print the pipe operator at the end
-        print() #move to the next line and start a new row
+                print(column[row], end=" ")  # Print symbol and space
 
-#To check how much the user's have won the bet
-def check_winnings(columns,lines,bet,values):
+        # Move to the Next column
+        print()
+
+# To check how much the user has won the bet
+def check_winnings(columns, lines, bet, values):
     winnings = 0
     winning_lines = []
-    for line in range(lines): #Check the symbol in a line
-        symbol = columns[0][line] #Check the first column and check lines
-        for column in columns: #loop to check all symbols by columns
-            symbol_to_check = column[line] #check the column at whatever rows you are looking at
+
+    # Loop through each line
+    for line in range(lines):
+        symbol = columns[0][line]  # Get the symbol in the first column for the current line
+
+        # Loop to check all symbols in the line across columns
+        for column in columns:
+            symbol_to_check = column[line]  # Get the symbol in the current column for the current line
+
+            # Check if the current symbol is different, break out of the loop
             if symbol != symbol_to_check:
                 break
-        else: # if the for loop doesn't break out then come to else(if they win)
+        else:
+            # If the for loop doesn't break, the user wins
             winnings += values[symbol] * bet
-            winning_lines.append(line + 1)
+            winning_lines.append(line + 1)  # Append the winning line(first column is 0)
 
     return winnings, winning_lines
 
